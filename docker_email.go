@@ -9,7 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/peoplenet/go-util/config"
-	_ "github.com/scorredoira/email"
+	"github.com/scorredoira/email"
 )
 
 var router *mux.Router
@@ -26,11 +26,11 @@ func mainEmail(w http.ResponseWriter, r *http.Request) {
 	// Connect to the server, authenticate, set the sender and recipient,
 	// and send the email all in one step.
 	params := mux.Vars(r)
-	email := params["email"]
+	uemail := params["email"]
 
 	m := email.NewMessage("subject", "message")
 	m.From = mail.Address{Name: "docker_alert", Address: "docker_test_intern@peoplenetonline.com"}
-	m.To = strings.Split(email, ";")
+	m.To = strings.Split(uemail, ";")
 	err := email.Send(
 		"aspmx.l.google.com:25",
 		nil,
