@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/peoplenet/go-util/config"
+	_ "github.com/scorredoira/email"
 )
 
 var router *mux.Router
