@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,23 +9,20 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/peoplenet/go-util/config"
 	"github.com/scorredoira/email"
 )
 
 var router *mux.Router
 
 func regroute() {
-	port := config.GetInt("8000")
+	port := 8000
 	router = mux.NewRouter()
-	router.HandleFunc("/{email}", mainEmail).Methods("GET")
+	router.HandleFunc("/email/{email}", mainEmail).Methods("GET")
 	address := fmt.Sprintf(":%d", port)
 	log.Fatal(http.ListenAndServe(address, router))
 }
 
 func mainEmail(w http.ResponseWriter, r *http.Request) {
-	// Connect to the server, authenticate, set the sender and recipient,
-	// and send the email all in one step.
 	params := mux.Vars(r)
 	uemail := params["email"]
 
@@ -39,10 +37,16 @@ func mainEmail(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 
+	} else {
+		w.WriteHeader(200)
+		response := "Email sent"
+		json.NewEncoder(w).Encode(response)
 	}
 
 }
 
 func main() {
 	go regroute()
+	forever := make(chan bool)
+	<-forever
 }
