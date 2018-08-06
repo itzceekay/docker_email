@@ -1,4 +1,4 @@
-package docker_email
+package main
 
 import (
 	"log"
