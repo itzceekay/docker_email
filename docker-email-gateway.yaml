@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: docker-mail-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: docker-mail
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - docker-mail-gateway
+  http:
+  - match:
+  - uri:
+        exact: /docker-mail
+    - uri:
+        prefix: /api/v1/docker-mail
+    route:
+    - destination:
+        host: docker-mail
+        port:
+          number: 8000
